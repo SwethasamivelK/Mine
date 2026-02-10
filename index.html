@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>For My Valentine ✨</title>
+<title>For My Valentine 💖</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   height: 100vh;
@@ -18,7 +22,7 @@ body {
   color: white;
 }
 
-/* Stars */
+/* 🌟 Stars */
 .star {
   position: absolute;
   background: white;
@@ -32,42 +36,89 @@ body {
   50% { opacity: 1; }
 }
 
-/* Card */
+/* 💌 Card */
 .card {
   background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(12px);
-  padding: 35px;
+  backdrop-filter: blur(14px);
+  padding: 30px;
   border-radius: 25px;
   text-align: center;
-  width: 90%;
+  width: 92%;
   max-width: 420px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+  position: relative;
+  z-index: 10;
 }
 
 h1 {
   font-size: 26px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
+/* 🎞 Slider */
+.slider {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.slides img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(1.15);
+  transition: opacity 1.5s ease, transform 4s ease;
+}
+
+.slides img.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* dreamy overlay */
+.slider::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.15),
+    rgba(0,0,0,0.45)
+  );
+  pointer-events: none;
+}
+
+/* ✨ Typing text */
 #type {
   font-size: 16px;
   min-height: 60px;
-  margin-top: 10px;
+  margin-top: 8px;
   color: #ffd6ff;
+  line-height: 1.5;
 }
 
+/* 💖 Buttons */
 .buttons {
   margin-top: 25px;
 }
 
 button {
-  padding: 12px 28px;
+  padding: 12px 30px;
   border-radius: 30px;
   border: none;
   font-size: 16px;
   cursor: pointer;
-  margin: 8px;
-  transition: all 0.2s ease;
+  margin: 6px;
+  transition: transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
 }
 
 .yes {
@@ -87,9 +138,9 @@ button {
 
 @keyframes shake {
   0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
+  25% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+  75% { transform: translateX(-6px); }
   100% { transform: translateX(0); }
 }
 </style>
@@ -97,19 +148,9 @@ button {
 
 <body>
 
-<div class="card">
-  <h1>✨ YourName ✨</h1>
-  <div id="type"></div>
-
-  <div class="buttons">
-    <button class="yes" onclick="yesClick()">Yes, always 💖</button>
-    <button class="no">No 🙈</button>
-  </div>
-</div>
-
+<!-- 🌟 Stars -->
 <script>
-/* Stars */
-for (let i = 0; i < 60; i++) {
+for (let i = 0; i < 70; i++) {
   const star = document.createElement("div");
   star.className = "star";
   const size = Math.random() * 2 + 1;
@@ -120,22 +161,60 @@ for (let i = 0; i < 60; i++) {
   star.style.animationDelay = Math.random() * 3 + "s";
   document.body.appendChild(star);
 }
+</script>
 
-/* Typing text */
-const text = "Out of all the stars in the universe… I somehow found you. 💫\nWill you be my Valentine?";
+<!-- 💌 Card -->
+<div class="card">
+  <h1>✨ YourName ✨</h1>
+
+  <!-- 🎞 Image Slider -->
+  <div class="slider">
+    <div class="slides">
+      <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" class="active">
+      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9">
+      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e">
+    </div>
+  </div>
+
+  <div id="type"></div>
+
+  <div class="buttons">
+    <button class="yes" onclick="yesClick()">Yes, always 💖</button>
+    <button class="no">No 🙈</button>
+  </div>
+</div>
+
+<script>
+/* ✨ Typing effect */
+const text =
+  "Out of all the stars in the universe… ✨<br>" +
+  "I somehow found you 💫<br><br>" +
+  "Will you be my Valentine? 💖";
+
 let i = 0;
+const speed = 45;
 const typeBox = document.getElementById("type");
 
 function typeText() {
   if (i < text.length) {
-    typeBox.innerHTML += text.charAt(i) === "\n" ? "<br>" : text.charAt(i);
+    typeBox.innerHTML += text.charAt(i);
     i++;
-    setTimeout(typeText, 45);
+    setTimeout(typeText, speed);
   }
 }
 typeText();
 
-/* Yes click */
+/* 🎞 Auto slider */
+const slides = document.querySelectorAll(".slides img");
+let current = 0;
+
+setInterval(() => {
+  slides[current].classList.remove("active");
+  current = (current + 1) % slides.length;
+  slides[current].classList.add("active");
+}, 3500);
+
+/* 💖 Yes click */
 function yesClick() {
   document.body.innerHTML = `
   <div style="
@@ -150,15 +229,15 @@ function yesClick() {
     padding:20px;
   ">
     <h1 style="font-size:34px;">💖 It was always you 💖</h1>
-    <p style="max-width:500px; font-size:18px;">
-      Thank you for choosing me today and every day.
-      I promise laughter, late-night talks, and endless love ✨
+    <p style="max-width:520px; font-size:18px; line-height:1.6;">
+      Thank you for choosing me today and every day.<br>
+      I promise laughter, warmth, and a lifetime of love ✨
     </p>
 
     <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
          style="width:280px; border-radius:20px; margin-top:25px;">
 
-    <p style="margin-top:20px;">Happy Valentine’s Day My Love ❤️</p>
+    <p style="margin-top:20px;">Happy Valentine’s Day ❤️</p>
   </div>
   `;
 }
